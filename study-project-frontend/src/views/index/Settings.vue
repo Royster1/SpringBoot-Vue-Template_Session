@@ -14,12 +14,10 @@ const activeName = ref('info')
           <info-settings/>
         </el-tab-pane>
         <el-tab-pane label="账号安全设置" name="security">
-          <!--          <security-settings/>-->
-          2
+          <security-settings/>
         </el-tab-pane>
         <el-tab-pane label="隐私设置" name="privacy">
-          <!--          <privacy-settings/>-->
-          3
+          <privacy-settings/>
         </el-tab-pane>
       </el-tabs>
     </div>

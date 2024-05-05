@@ -76,7 +76,9 @@
 
         </el-header>
         <el-main style="padding: 0">
-          <router-view/>
+          <el-scrollbar style="height: 100%">
+            <router-view/>
+          </el-scrollbar>
         </el-main>
       </el-container>
     </el-container>
