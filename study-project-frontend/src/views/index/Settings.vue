@@ -1,14 +1,10 @@
 <script setup>
 import {ref} from "vue";
 import {useStore} from "@/stores";
-import InfoSettings from "@/components/settings/InfoSettings.vue";
-import SecuritySettings from "@/components/settings/SecuritySettings.vue";
-import PrivacySettings from "@/components/settings/PrivacySettings.vue";
-
 const store = useStore()
 const activeName = ref('info')
-
 </script>
+
 
 <template>
   <div style="display: flex;padding: 20px 30px">
@@ -18,10 +14,12 @@ const activeName = ref('info')
           <info-settings/>
         </el-tab-pane>
         <el-tab-pane label="账号安全设置" name="security">
-          <security-settings/>
+          <!--          <security-settings/>-->
+          2
         </el-tab-pane>
         <el-tab-pane label="隐私设置" name="privacy">
-          <privacy-settings/>
+          <!--          <privacy-settings/>-->
+          3
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -43,6 +41,7 @@ const activeName = ref('info')
     </div>
   </div>
 </template>
+
 
 <style scoped>
 .user-card {

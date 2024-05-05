@@ -2,9 +2,9 @@
   <div style="height: 100vh">
     <el-container style="height: 100%">
       <el-aside style="border-right: solid 1px #d3d3d3; transition: 0.5s" :width="isCollapse ? '60px' : '220px'">
-        <div style="text-align: center;padding: 15px 0;margin-left: 19px">
-          <el-image src="https://element-plus.gitee.io/images/element-plus-logo.svg"
-                    style="width: 150px"/>
+        <div style="text-align: center;padding: 15px 0;margin-left: 12px">
+          <el-image src="https://avatars.githubusercontent.com/u/68583457?s=400&v=4"
+                    style="width: 35px"/>
         </div>
         <el-menu
             :default-active="router.currentRoute.value.path"
