@@ -7,6 +7,7 @@
                     style="width: 150px"/>
         </div>
         <el-menu
+            :default-active="router.currentRoute.value.path"
             router
             :collapse="isCollapse"
             style="border: none"
@@ -97,9 +98,10 @@ const store = useStore()
 
 const logout = () => {
     get('/api/auth/logout', (message) => {
-        ElMessage.success(message)
-        router.push('/')
+      ElMessage.success(message)
       store.auth.user = null
+      localStorage.removeItem('user')
+      router.push('/')
     })
 }
 </script>
