@@ -1,15 +1,23 @@
 <script setup>
 import {onMounted, reactive, ref} from "vue";
 import {Select} from "@element-plus/icons-vue";
+import {post} from "../../net";
+import {ElMessage} from "element-plus";
 const infoForm = reactive({
   username: null,
-  desc: '',
+  biography: '',
   phone: '',
   qq: '',
   wx: '',
   blog: '',
   sex: ''
 })
+
+const save = () => {
+  post('/api/user/save-info', infoForm, () => {
+    ElMessage.success("保存成功！")
+  }, 'json')
+}
 </script>
 
 
@@ -17,7 +25,7 @@ const infoForm = reactive({
   <div>
     <el-form
         ref="form"
-        :rules="rules"
+
         label-position="top"
         label-width="100px"
         :model="infoForm"
@@ -43,11 +51,11 @@ const infoForm = reactive({
       <el-form-item label="博客" prop="blog">
         <el-input :maxlength="50" v-model="infoForm.blog" />
       </el-form-item>
-      <el-form-item label="个人简介" prop="desc">
-        <el-input :maxlength="500" type="textarea" v-model="infoForm.desc" :rows="6"/>
+      <el-form-item label="个人简介" prop="biography">
+        <el-input :maxlength="500" type="textarea" v-model="infoForm.biography" :rows="6"/>
       </el-form-item>
     </el-form>
-    <el-button type="success" :icon="Select" >保存个人信息设置</el-button>
+    <el-button type="success" :icon="Select" @click="save">保存个人信息设置</el-button>
   </div>
 </template>
 
