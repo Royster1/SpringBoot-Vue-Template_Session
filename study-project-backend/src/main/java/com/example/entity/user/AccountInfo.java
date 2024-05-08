@@ -6,13 +6,21 @@ import org.hibernate.validator.constraints.Length;
 
 @Data
 public class AccountInfo {
+    private static final String USERNAME_REGEX = "^[a-zA-Z0-9一-龥]+$";
 
     int uid;
+    @Pattern(regexp = USERNAME_REGEX)
+    @Length(min = 2, max = 8)
     String username;
     String sex;
+    @Length(max = 11)
     String phone;
+    @Length(max = 11)
     String qq;
+    @Length(max = 30)
     String wx;
+    @Length(max = 50)
     String blog;
+    @Length(max = 500)
     String biography;
 }

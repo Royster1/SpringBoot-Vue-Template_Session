@@ -1,8 +1,9 @@
 <script setup>
 import {onMounted, reactive, ref} from "vue";
 import {Select} from "@element-plus/icons-vue";
-import {post} from "../../net";
+import {get, post} from "@/net";
 import {ElMessage} from "element-plus";
+
 const infoForm = reactive({
   username: null,
   biography: '',
@@ -78,6 +79,20 @@ const save = () => {
     }
   })
 }
+
+onMounted(() => {
+  if(infoForm.username == null) {
+    get('/api/user/info', (message) => {
+      infoForm.username = message.username
+      infoForm.biography = message.biography
+      infoForm.phone = message.phone
+      infoForm.qq = message.qq
+      infoForm.wx = message.wx
+      infoForm.blog = message.blog
+      infoForm.sex = message.sex ? message.sex : 'male'
+    })
+  }
+})
 </script>
 
 

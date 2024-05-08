@@ -32,4 +32,7 @@ public interface UserMapper {
 
     @Update("update db_account set username=#{name} where id=#{uid}")
     void updateUsername(String name, int uid);
+
+    @Select("select * from db_account_info left join db_account on id = uid where id = #{uid}")
+    AccountInfo findInfoById(int uid);
 }

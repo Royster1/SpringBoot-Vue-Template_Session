@@ -24,4 +24,9 @@ public class UserServiceImpl implements UserService {
         userMapper.saveInfo(accountInfo);
         return true;
     }
+
+    @Override
+    public AccountInfo userInfo(int uid) {
+        return userMapper.findInfoById(uid);
+    }
 }
