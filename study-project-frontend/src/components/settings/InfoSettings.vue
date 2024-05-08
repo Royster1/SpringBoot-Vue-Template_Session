@@ -10,13 +10,73 @@ const infoForm = reactive({
   qq: '',
   wx: '',
   blog: '',
-  sex: ''
+  sex: 'male'
 })
 
+// 对表单进行验证, 验证成功发送请求
+const form = ref()
+
+
+const validateUsername = (rule, value, callback) => {
+  if (value === null) {
+    callback(new Error('请输入用户名'))
+  } else if(!/^[a-zA-Z0-9\u4e00-\u9fa5]+$/.test(value)){
+    callback(new Error('用户名不能包含特殊字符，只能是中文/英文'))
+  } else {
+    callback()
+  }
+}
+const validatePhoneNumber = (rule, value, callback) => {
+  if(value !== '' && !/^1[3-9]\d{9}$/.test(value)) {
+    callback(new Error('手机号格式错误'))
+  } else {
+    callback()
+  }
+}
+
+const validateBlogURL = (rule, value, callback) => {
+  if(value !== '' && !/^https?:\/\/((www.)?[\w-]+.[\w-]+.?[\w-])?\/?([\w-])\/?([\w-]*)\/?$/.test(value)) {
+    callback(new Error('博客地址格式错误'))
+  } else {
+    callback()
+  }
+}
+
+
+const rules = {
+  username: [
+    { validator: validateUsername, trigger: ['blur', 'change'] },
+    { min: 2, max: 8, message: '用户名的长度必须在2-8个字符之间', trigger: ['blur', 'change'] },
+  ],
+  phone: [
+    { validator: validatePhoneNumber, trigger: ['blur', 'change'] },
+    { min: 11, max: 11, message: '手机号只能是11位标准手机号', trigger: ['blur', 'change'] },
+  ],
+  qq: [
+    { min: 8, max: 11, message: 'QQ号只能是8-11位', trigger: ['blur', 'change'] },
+  ],
+  wx: [
+    { min: 5, max: 30, message: '微信号只能是5-30位', trigger: ['blur', 'change'] },
+  ],
+  blog: [
+    { validator: validateBlogURL, trigger: ['blur', 'change'] },
+    { max: 50, message: '博客URL地址太长', trigger: ['blur', 'change'] },
+  ],
+  biography: [
+    { max: 500, message: '个人简介不能超过500字', trigger: ['blur', 'change'] },
+  ]
+}
+
 const save = () => {
-  post('/api/user/save-info', infoForm, () => {
-    ElMessage.success("保存成功！")
-  }, 'json')
+  form.value.validate((isValid) => {
+    if(isValid) {
+      post('/api/user/save-info', infoForm, () => {
+        ElMessage.success("保存成功！")
+      }, 'json')
+    } else {
+      ElMessage.warning('表单内容有误，请重新检查内容是否正确填写')
+    }
+  })
 }
 </script>
 
@@ -25,7 +85,7 @@ const save = () => {
   <div>
     <el-form
         ref="form"
-
+        :rules="rules"
         label-position="top"
         label-width="100px"
         :model="infoForm"
