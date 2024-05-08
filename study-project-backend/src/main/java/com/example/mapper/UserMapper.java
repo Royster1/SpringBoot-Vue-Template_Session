@@ -29,4 +29,7 @@ public interface UserMapper {
              qq=#{qq}, wx=#{wx}, blog=#{blog}, `biography`=#{biography}
             """)
     void saveInfo(AccountInfo info);
+
+    @Update("update db_account set username=#{name} where id=#{uid}")
+    void updateUsername(String name, int uid);
 }

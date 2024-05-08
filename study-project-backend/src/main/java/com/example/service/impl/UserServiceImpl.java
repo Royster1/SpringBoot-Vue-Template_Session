@@ -14,7 +14,14 @@ public class UserServiceImpl implements UserService {
     UserMapper userMapper;
 
     @Override
-    public void saveUserInfo(AccountInfo accountInfo) {
+    public boolean saveUserInfo(AccountInfo accountInfo) {
+        Account account = userMapper.findAccountByNameOrEmail(accountInfo.getUsername());
+        if (account == null) {
+            userMapper.updateUsername(accountInfo.getUsername(), accountInfo.getUid());
+        } else if (account.getId() != accountInfo.getUid()) {
+            return false;
+        }
         userMapper.saveInfo(accountInfo);
+        return true;
     }
 }
