@@ -64,7 +64,7 @@ public class AuthorizeController {
      * 3. 用户发起重置密码请求, 如果存在标志, 就成功重置
      * */
     @PostMapping("/start-reset")
-    public RestBean<String> startReset(@Pattern(regexp = EMAIL_REGEX) @RequestParam("email") String email,
+    public RestBean<String> startReset(@Pattern(regexp = EMAIL_REGEX)@RequestParam("email") String email,
                                        @Length(min = 6, max = 6) @RequestParam("code") String code,
                                        HttpSession session) {
         String s = service.validateOnly(email, code, session.getId());

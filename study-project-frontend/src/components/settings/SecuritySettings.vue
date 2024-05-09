@@ -1,9 +1,10 @@
 <script setup>
-import {onMounted, reactive} from "vue"
+import {onMounted, reactive, ref} from "vue"
 import {Lock, Message, Select} from "@element-plus/icons-vue";
 import {get, post} from "@/net";
 import {ElMessage} from "element-plus";
 import {logout} from "@/net";
+
 
 const securityForm = reactive({
   email: null,
@@ -12,12 +13,24 @@ const securityForm = reactive({
   password_new_repeat: '',
 });
 
+
+const emailForm = ref() // 邮箱前端验证
 const saveEmail = () => {
-  post('/api/user/save-email', {email: securityForm.email},
-      ()=> ElMessage.success("保存成功! "))
+  emailForm.value.validate((isValid) => {
+    if(isValid) {
+      post('/api/user/save-email', {email: securityForm.email}, () => {
+        ElMessage.success("保存成功！")
+      })
+    } else {
+      ElMessage.warning('邮件格式有误，请正确填写')
+    }
+  })
 }
 
+const passwordForm = ref() // 密码前端拦截
 const changePassword = () => {
+  passwordForm.value.validate((isValid) => {
+    if(isValid) {
       post('/api/user/save-password', {
         old: securityForm.password_old,
         new: securityForm.password_new
@@ -25,6 +38,10 @@ const changePassword = () => {
         ElMessage.success('密码修改成功，请重新登录！')
         logout()
       })
+    } else {
+      ElMessage.warning('密码校验失败，请检查是否正确填写')
+    }
+  })
 }
 
 onMounted(() => {
@@ -32,6 +49,36 @@ onMounted(() => {
     get('/api/user/email', message => securityForm.email = message)
   }
 })
+
+
+const validatePassword = (rule, value, callback) => {
+  if (value === '') {
+    callback(new Error('请再次输入密码'))
+  } else if (value !== securityForm.password_new) {
+    callback(new Error("两次输入的密码不一致"))
+  } else {
+    callback()
+  }
+}
+
+const rules = {
+  password_old: [
+    { required: true, message: '请输入密码', trigger: 'blur' },
+    { min: 6, max: 16, message: '密码的长度必须在6-16个字符之间', trigger: ['blur', 'change'] }
+  ],
+  password_new: [
+    { required: true, message: '请输入密码', trigger: 'blur' },
+    { min: 6, max: 16, message: '密码的长度必须在6-16个字符之间', trigger: ['blur', 'change'] }
+  ],
+  password_new_repeat: [
+    { required: true, message: '请再次输入密码', trigger: 'blur' },
+    { validator: validatePassword, trigger: ['blur', 'change'] },
+  ],
+  email: [
+    { required: true, message: '请输入邮件地址', trigger: 'blur' },
+    { type: 'email', message: '请输入合法的电子邮件地址', trigger: ['blur', 'change']}
+  ]
+}
 </script>
 
 <template>
@@ -40,6 +87,7 @@ onMounted(() => {
       <h1><el-icon><Message/></el-icon> 邮箱设置</h1>
       <el-form
           ref="emailForm"
+          :rules="rules"
           label-position="top"
           label-width="100px"
           :model="securityForm"
@@ -54,6 +102,7 @@ onMounted(() => {
     <div>
       <h1><el-icon><Lock/></el-icon> 密码设置</h1>
       <el-form
+          :rules="rules"
           ref="passwordForm"
           label-position="top"
           label-width="100px"
