@@ -38,4 +38,10 @@ public interface UserMapper {
 
     @Update("update db_account set email=#{email} where id=#{uid}")
     void updateEmail(String email, int uid);
+
+    @Update("update db_account set password=#{password} where id=#{uid}")
+    void updatePassword(String password, int uid);
+
+    @Select("select * from db_account where id = #{id}")
+    Account findAccountById(int id);
 }

@@ -1,8 +1,10 @@
 <script setup>
-import {onMounted, reactive, ref} from "vue"
+import {onMounted, reactive} from "vue"
 import {Lock, Message, Select} from "@element-plus/icons-vue";
 import {get, post} from "@/net";
 import {ElMessage} from "element-plus";
+import {logout} from "@/net";
+
 const securityForm = reactive({
   email: null,
   password_old: '',
@@ -13,6 +15,16 @@ const securityForm = reactive({
 const saveEmail = () => {
   post('/api/user/save-email', {email: securityForm.email},
       ()=> ElMessage.success("保存成功! "))
+}
+
+const changePassword = () => {
+      post('/api/user/save-password', {
+        old: securityForm.password_old,
+        new: securityForm.password_new
+      }, () => {
+        ElMessage.success('密码修改成功，请重新登录！')
+        logout()
+      })
 }
 
 onMounted(() => {
@@ -57,7 +69,7 @@ onMounted(() => {
           <el-input type="password" show-password v-model="securityForm.password_new_repeat" />
         </el-form-item>
       </el-form>
-      <el-button type="success" :icon="Select">修改密码</el-button>
+      <el-button type="success" :icon="Select" @click="changePassword">修改密码</el-button>
     </div>
   </div>
 </template>

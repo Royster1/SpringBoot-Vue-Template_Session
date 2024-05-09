@@ -1,11 +1,13 @@
 package com.example.controller;
 
 import com.example.entity.RestBean;
+import com.example.entity.auth.Account;
 import com.example.entity.user.AccountInfo;
 import com.example.entity.user.AccountUser;
 import com.example.service.UserService;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,5 +57,16 @@ public class UserController {
     @GetMapping("/email")
     public RestBean<String> email(@SessionAttribute("account") AccountUser user){
         return RestBean.success(user.getEmail());
+    }
+
+    @PostMapping("/save-password")
+    public RestBean<String> savePassword(@Length(min = 6, max = 16) @RequestParam("old") String pass_old,
+                                         @Length(min = 6, max = 16) @RequestParam("new") String pass_new,
+                                         @SessionAttribute("account")AccountUser user){
+        if (userService.changePassword(pass_old, pass_new, user.getId())){
+            return RestBean.success();
+        } else {
+            return RestBean.failure(400, "原密码错误");
+        }
     }
 }

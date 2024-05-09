@@ -8,4 +8,6 @@ public interface UserService {
     AccountInfo userInfo(int uid);
 
     boolean saveEmail(String email, int id);
+
+    boolean changePassword(String old, String _new, int uid);
 }

@@ -1,5 +1,9 @@
 import axios from "axios";
 import {ElMessage} from "element-plus";
+import router from "@/router";
+import {useStore} from "@/stores";
+
+
 
 const defaultError = () => ElMessage.error('发生了一些错误，请联系管理员')
 const defaultFailure = (message) => ElMessage.warning(message)
@@ -29,4 +33,15 @@ function get(url, success, failure = defaultFailure, error = defaultError) {
     }).catch(error)
 }
 
-export { get, post }
+const logout = () => {
+    get('/api/auth/logout', (message) => {
+        const store = useStore()
+        ElMessage.success(message)
+        store.auth.user = null
+        localStorage.removeItem('user')
+        router.push('/')
+    })
+}
+
+
+export { get, post, logout}

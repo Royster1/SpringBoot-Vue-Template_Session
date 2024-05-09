@@ -86,26 +86,21 @@
 </template>
 
 <script setup>
-import {get} from "@/net";
-import {ElMessage} from "element-plus";
+import {logout} from "../net";
 import router from "@/router";
 import {useStore} from "@/stores";
 import {Document, Location, Setting, Menu as IconMenu, Search, UserFilled, StarFilled, Back, Expand, Fold} from "@element-plus/icons-vue";
 import {ref} from "vue";
+import {ElMessage} from "element-plus";
+import {get} from "../net";
 
 //折叠菜单
 const isCollapse = ref(true)
 
 const store = useStore()
 
-const logout = () => {
-    get('/api/auth/logout', (message) => {
-      ElMessage.success(message)
-      store.auth.user = null
-      localStorage.removeItem('user')
-      router.push('/')
-    })
-}
+
+
 </script>
 
 <style scoped>
