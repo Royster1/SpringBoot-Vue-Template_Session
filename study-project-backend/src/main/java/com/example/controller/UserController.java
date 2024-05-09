@@ -3,6 +3,7 @@ package com.example.controller;
 import com.example.entity.RestBean;
 import com.example.entity.auth.Account;
 import com.example.entity.user.AccountInfo;
+import com.example.entity.user.AccountPrivacy;
 import com.example.entity.user.AccountUser;
 import com.example.service.UserService;
 import jakarta.annotation.Resource;
@@ -69,5 +70,18 @@ public class UserController {
         } else {
             return RestBean.failure(400, "原密码错误");
         }
+    }
+
+    @PostMapping("/save-privacy")
+    public RestBean<Void> savePrivacy(@RequestBody AccountPrivacy privacy,
+                                      @SessionAttribute("account") AccountUser user){
+        privacy.setUid(user.getId());
+        userService.saveUserPrivacy(privacy);
+        return RestBean.success();
+    }
+
+    @GetMapping("/privacy")
+    public RestBean<AccountPrivacy> privacy(@SessionAttribute("account") AccountUser user){
+        return RestBean.success(userService.userPrivacy(user.getId()));
     }
 }

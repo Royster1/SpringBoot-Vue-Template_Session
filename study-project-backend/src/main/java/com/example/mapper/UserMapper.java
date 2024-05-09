@@ -2,6 +2,7 @@ package com.example.mapper;
 
 import com.example.entity.auth.Account;
 import com.example.entity.user.AccountInfo;
+import com.example.entity.user.AccountPrivacy;
 import com.example.entity.user.AccountUser;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -44,4 +45,16 @@ public interface UserMapper {
 
     @Select("select * from db_account where id = #{id}")
     Account findAccountById(int id);
+
+    @Insert("""
+            insert into db_account_privacy (uid, email, sex, phone, qq, wx, blog)
+             values (#{uid}, #{email}, #{sex}, #{phone}, #{qq}, #{wx}, #{blog})
+             on duplicate key update uid=#{uid}, email=#{email}, sex=#{sex},
+             phone=#{phone}, wx=#{wx}, qq=#{qq}, blog=#{blog}
+            """)
+    void savePrivacy(AccountPrivacy privacy);
+
+    @Select("select * from db_account_privacy where uid = #{uid}")
+    AccountPrivacy findPrivacyById(int uid);
 }
+

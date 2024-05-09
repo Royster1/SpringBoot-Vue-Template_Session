@@ -2,6 +2,7 @@ package com.example.service.impl;
 
 import com.example.entity.auth.Account;
 import com.example.entity.user.AccountInfo;
+import com.example.entity.user.AccountPrivacy;
 import com.example.mapper.UserMapper;
 import com.example.service.UserService;
 import jakarta.annotation.Resource;
@@ -52,5 +53,15 @@ public class UserServiceImpl implements UserService {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public void saveUserPrivacy(AccountPrivacy privacy) {
+        userMapper.savePrivacy(privacy);
+    }
+
+    @Override
+    public AccountPrivacy userPrivacy(int uid) {
+        return userMapper.findPrivacyById(uid);
     }
 }

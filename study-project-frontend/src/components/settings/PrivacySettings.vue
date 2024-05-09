@@ -13,7 +13,22 @@ const privacyForm = reactive({
   sex: false
 })
 
+const save = () => {
+  post('/api/user/save-privacy', privacyForm, () =>
+      ElMessage.success('保存成功 '), 'json'
+  )
+}
 
+onMounted(() => {
+  get('/api/user/privacy', message => {
+    privacyForm.email = message.email
+    privacyForm.phone = message.phone
+    privacyForm.qq = message.qq
+    privacyForm.wx = message.wx
+    privacyForm.blog = message.blog
+    privacyForm.sex = message.sex
+  })
+})
 </script>
 
 <template>
@@ -42,7 +57,7 @@ const privacyForm = reactive({
         <el-checkbox v-model="privacyForm.blog" label="是否公开展示展示我的博客" size="large" />
       </el-form-item>
     </el-form>
-    <el-button type="success" :icon="Select">保存隐私设置</el-button>
+    <el-button type="success" :icon="Select" @click="save">保存隐私设置</el-button>
   </div>
 </template>
 
