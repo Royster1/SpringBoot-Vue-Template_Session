@@ -41,7 +41,21 @@ const logout = () => {
         localStorage.removeItem('user')
         router.push('/')
     })
+
 }
 
+const me = (index = false) => {
+    get('/api/user/me', (message) => {
+        const store = useStore()
+        store.auth.user = message
+        localStorage.setItem("user", JSON.stringify(message))
+       if (index)
+           router.push('/index')
+    }, () => {
+        const store = useStore()
+        store.auth.user = null
+    })
 
-export { get, post, logout}
+}
+
+export { get, post, logout, me}

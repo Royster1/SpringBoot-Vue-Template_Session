@@ -1,7 +1,7 @@
 <script setup>
 import {onMounted, reactive, ref} from "vue"
 import {Lock, Message, Select} from "@element-plus/icons-vue";
-import {get, post} from "@/net";
+import {get, post, me} from "@/net";
 import {ElMessage} from "element-plus";
 import {logout} from "@/net";
 
@@ -19,6 +19,7 @@ const saveEmail = () => {
   emailForm.value.validate((isValid) => {
     if(isValid) {
       post('/api/user/save-email', {email: securityForm.email}, () => {
+        me()
         ElMessage.success("保存成功！")
       })
     } else {

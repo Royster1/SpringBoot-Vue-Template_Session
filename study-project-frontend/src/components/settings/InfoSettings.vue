@@ -1,8 +1,9 @@
 <script setup>
 import {onMounted, reactive, ref} from "vue";
 import {Select} from "@element-plus/icons-vue";
-import {get, post} from "@/net";
+import {get, post, me} from "@/net";
 import {ElMessage} from "element-plus";
+
 
 const infoForm = reactive({
   username: null,
@@ -72,6 +73,7 @@ const save = () => {
   form.value.validate((isValid) => {
     if(isValid) {
       post('/api/user/save-info', infoForm, () => {
+        me()
         ElMessage.success("保存成功！")
       }, 'json')
     } else {
