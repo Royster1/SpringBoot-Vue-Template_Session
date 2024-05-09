@@ -1,6 +1,8 @@
 <script setup>
 import {onMounted, reactive, ref} from "vue"
 import {Lock, Message, Select} from "@element-plus/icons-vue";
+import {get, post} from "@/net";
+import {ElMessage} from "element-plus";
 const securityForm = reactive({
   email: null,
   password_old: '',
@@ -8,6 +10,16 @@ const securityForm = reactive({
   password_new_repeat: '',
 });
 
+const saveEmail = () => {
+  post('/api/user/save-email', {email: securityForm.email},
+      ()=> ElMessage.success("保存成功! "))
+}
+
+onMounted(() => {
+  if(securityForm.email == null) {
+    get('/api/user/email', message => securityForm.email = message)
+  }
+})
 </script>
 
 <template>
@@ -24,7 +36,7 @@ const securityForm = reactive({
           <el-input v-model="securityForm.email" />
         </el-form-item>
       </el-form>
-      <el-button type="success" :icon="Select" >保存邮件地址</el-button>
+      <el-button type="success" :icon="Select" @click="saveEmail">保存邮件地址</el-button>
     </div>
     <el-divider/>
     <div>

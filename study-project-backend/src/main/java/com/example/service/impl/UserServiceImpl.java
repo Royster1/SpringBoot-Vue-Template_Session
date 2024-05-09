@@ -29,4 +29,13 @@ public class UserServiceImpl implements UserService {
     public AccountInfo userInfo(int uid) {
         return userMapper.findInfoById(uid);
     }
+
+    @Override
+    public boolean saveEmail(String email, int uid) {
+        Account account = userMapper.findAccountByNameOrEmail(email);
+        if (account == null) {
+            userMapper.updateEmail(email, uid);
+        } else return account.getId() == uid;
+        return true;
+    }
 }

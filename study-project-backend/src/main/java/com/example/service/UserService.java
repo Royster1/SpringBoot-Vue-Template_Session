@@ -6,4 +6,6 @@ public interface UserService {
     boolean saveUserInfo(AccountInfo accountInfo);
 
     AccountInfo userInfo(int uid);
+
+    boolean saveEmail(String email, int id);
 }
